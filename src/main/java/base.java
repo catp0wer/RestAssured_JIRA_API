@@ -2,17 +2,17 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
-
+import files.ReusableMethods;
+import java.io.IOException;
 import static io.restassured.RestAssured.given;
 
 
 public class base {
-
     @Test
-    public void JiraAPI(){
+    public void JiraAPI() throws IOException {
 
         //Create a session
-        RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = ReusableMethods.getProp("HOST");
         Response sessionResponse =
                 given().header("Content-Type","application/json").
                 body("{\"username\": \"XXX\", \"password\": \"YYY\"}").
