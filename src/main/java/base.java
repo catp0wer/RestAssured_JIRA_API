@@ -1,5 +1,4 @@
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import files.ReusableMethods;
@@ -15,20 +14,17 @@ public class base {
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         Response sessionResponse =
                 given().header("Content-Type","application/json").
-                body("{\"username\": \"XXX\", \"password\": \"YYY\"}").
+                body(ReusableMethods.getProp("POST_body_authentication")).
                 when().
-                post("/rest/auth/1/session").
+                post(ReusableMethods.getProp("POST_res")).
                 then().
                 statusCode(200).
                 extract().response();
 
-        String respInString = sessionResponse.asString();
-        System.out.println(respInString);
+        String respInString = ReusableMethods.responseToString(sessionResponse);
 
         //extracting the session value
-        JsonPath resInJson = new JsonPath(respInString);
-        String sessionValue = resInJson.get("session.value");
-        System.out.println("Session value is: " + sessionValue);
+        ReusableMethods.getValueFromResponse(respInString,ReusableMethods.getProp("Session_id"));
 
     }
 
