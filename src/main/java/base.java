@@ -1,30 +1,36 @@
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import files.ReusableMethods;
 import java.io.IOException;
 import static io.restassured.RestAssured.given;
+import files.payLoad;
 
 
 public class base {
     @Test
     public void JiraAPI() throws IOException {
 
-        //Create a session
+        //creating issue
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
-        Response sessionResponse =
-                given().header("Content-Type","application/json").
-                body(ReusableMethods.getProp("POST_body_authentication")).
+        Response res = given().header("Content-Type","application/json").
+                header("Cookie","JSESSIONID="+ReusableMethods.getSessionID()).
+                body(payLoad.getPostDataCreateIssue()).
                 when().
-                post(ReusableMethods.getProp("POST_res")).
+                post("/rest/api/2/issue").
                 then().
-                statusCode(200).
-                extract().response();
+                statusCode(201).extract().response();
+        //convert response into String
+        String respString = ReusableMethods.responseToString(res);
+        //convert response from String to Json to extract bug's id from json response
+        JsonPath respJson = ReusableMethods.responseToJson(respString);
+        System.out.println(ReusableMethods.getValueFromResponse(respJson,"id"));
 
-        String respInString = ReusableMethods.responseToString(sessionResponse);
 
-        //extracting the session value
-        ReusableMethods.getValueFromResponse(respInString,ReusableMethods.getProp("Session_id"));
+
+
+
 
     }
 
