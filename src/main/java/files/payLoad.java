@@ -16,6 +16,17 @@ public class payLoad {
                 "}";
         return postDataCreateIssue;
     }
+
+    public static String getPostDataAddComment(){
+        String postDataAddComment = "{"+
+                "\"body\":\"adding first comment\","+
+                "\"visibility\":{"+
+            "\"type\":\"role\","+
+                    "\"value\":\"Administrators\""+
+            "}"+
+        "}";
+       return postDataAddComment;
+    }
 }
 
 
