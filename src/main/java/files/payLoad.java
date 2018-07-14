@@ -7,7 +7,7 @@ public class payLoad {
                 "\"project\": {" +
                 "\"key\": \"RES\"" +
                 "}," +
-                "\"summary\": \"Second bug\"," +
+                "\"summary\": \"Bug X is created\"," +
                 "\"description\":\"Test\"," +
                 "\"issuetype\": {" +
                 "\"name\": \"Bug\"" +
@@ -16,7 +16,17 @@ public class payLoad {
                 "}";
         return postDataCreateIssue;
     }
-
+    public static String getPutDataUpdateIssue() {
+        String putDataUpdateIssue = "{" +
+                "\"update\":{" +
+                "\"summary\": [{"+
+                "\"set\":\"Bug X is updated\""+
+                "}"+
+                "]"+
+                "}"+
+                "}";
+        return putDataUpdateIssue;
+    }
     public static String getPostDataAddComment(){
         String postDataAddComment = "{"+
                 "\"body\":\"adding first comment\","+
@@ -27,6 +37,19 @@ public class payLoad {
         "}";
        return postDataAddComment;
     }
+
+    public static String getPostDataUpdateComment() {
+        String postDataUpdateComment = "{" +
+                "\"body\":\"updating the comment\"," +
+                "\"visibility\":{" +
+                "\"type\":\"role\"," +
+                "\"value\":\"Administrators\"" +
+                "}" +
+                "}";
+        return postDataUpdateComment;
+    }
+
+
 }
 
 
