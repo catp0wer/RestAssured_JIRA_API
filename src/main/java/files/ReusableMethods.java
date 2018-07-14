@@ -18,6 +18,19 @@ public class ReusableMethods {
         return prop.getProperty(key);
     }
 
+    public static Response AddIssue() throws IOException {
+        //creating issue
+        RestAssured.baseURI = ReusableMethods.getProp("HOST");
+        Response res = given().
+                header("Content-Type", "application/json").
+                header("Cookie", "JSESSIONID=" + ReusableMethods.getSessionID()).
+                body(payLoad.getPostDataCreateIssue()).
+                when().
+                post("/rest/api/2/issue").
+                then().
+                statusCode(201).extract().response();
+        return res;
+    }
     public static String getSessionID() throws IOException {
         //Create a session
         RestAssured.baseURI = getProp("HOST");
@@ -30,17 +43,18 @@ public class ReusableMethods {
                         statusCode(200).
                         extract().response();
 
-        String respInString = responseToString(sessionResponse);
-        JsonPath respInJson = responseToJson(respInString);
+
         //extracting the session value
-        return getValueFromResponse(respInJson,getProp("Session_id"));
+        return getValueFromJson(sessionResponse,getProp("Session_id"));
     }
     public static JsonPath responseToJson(String response){
         JsonPath res = new JsonPath(response);
         return res;
     }
-   public static String getValueFromResponse(JsonPath response, String valueToExtract){
-       String value = response.get(valueToExtract);
+   public static String getValueFromJson(Response response, String valueToExtract){
+       String respInString = responseToString(response);
+       JsonPath respInJson = responseToJson(respInString);
+       String value = respInJson.get(valueToExtract);
        System.out.println(valueToExtract+ " is equal to : " + value);
        return value;
    }
