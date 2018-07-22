@@ -2,6 +2,7 @@ package files;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +11,14 @@ import java.util.Properties;
 import static io.restassured.RestAssured.given;
 
 public class ReusableMethods {
+    private static String token;
 
+    public ReusableMethods(String username, String password) {
+        String pair = username + ":" + password;
+        byte[] encodedBytes = Base64.encodeBase64(pair.getBytes());
+        token = "Basic "+new String(encodedBytes);
+
+    }
     public static String getProp(String key) throws IOException {
         Properties prop = new Properties();
         InputStream in = ClassLoader.getSystemResourceAsStream("env.properties");
@@ -19,17 +27,16 @@ public class ReusableMethods {
     }
 
     public static Response AddIssue() throws IOException {
-        //creating issue
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
-        Response res = given().
+        return given().
                 header("Content-Type", "application/json").
-                header("Cookie", "JSESSIONID=" + ReusableMethods.getSessionID()).
+                header("Authorization", token).
                 body(payLoad.getPostDataCreateIssue()).
                 when().
                 post("/rest/api/2/issue").
                 then().
                 statusCode(201).extract().response();
-        return res;
+
     }
 
     public static String getSessionID() throws IOException {
