@@ -3,6 +3,7 @@ package base;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import org.apache.commons.codec.binary.Base64;
 import org.testng.annotations.Test;
 import files.ReusableMethods;
 import java.io.IOException;
@@ -10,9 +11,15 @@ import static io.restassured.RestAssured.given;
 import files.payLoad;
 
 public class Issue {
+
+    public Issue() throws IOException {
+    }
+    ReusableMethods tokenAuth = new ReusableMethods(ReusableMethods.getProp("Username"),
+                                ReusableMethods.getProp("Password"));
+    Response res;
     @Test(testName = "Add an issue")
     public void AddIssue() throws IOException {
-        ReusableMethods.AddIssue();
+        res = tokenAuth.AddIssue();
     }
 
     @Test(testName = "Edit an issue")
