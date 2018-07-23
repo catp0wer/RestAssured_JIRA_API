@@ -14,9 +14,9 @@ public class Issue {
 
     public Issue() throws IOException {
     }
-    ReusableMethods tokenAuth = new ReusableMethods(ReusableMethods.getProp("Username"),
+    private ReusableMethods tokenAuth = new ReusableMethods(ReusableMethods.getProp("Username"),
                                 ReusableMethods.getProp("Password"));
-    Response res;
+    private Response res;
     @Test(testName = "Add an issue")
     public void AddIssue() throws IOException {
         res = tokenAuth.AddIssue();
@@ -24,8 +24,7 @@ public class Issue {
 
     @Test(testName = "Edit an issue")
     public void EditIssue() throws IOException {
-        Response addIssueResponse = ReusableMethods.AddIssue();
-        String issueID = ReusableMethods.getValueFromJson(addIssueResponse, "id");
+        String issueID = ReusableMethods.getValueFromJson(res, "id");
 
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
@@ -36,13 +35,11 @@ public class Issue {
                 put("/rest/api/2/issue/" + issueID).
                 then().
                 statusCode(204);
-
     }
 
     @Test(testName = "Delete an issue")
     public void DeleteIssue() throws IOException {
-        Response addIssueResponse = ReusableMethods.AddIssue();
-        String issueID = ReusableMethods.getValueFromJson(addIssueResponse, "id");
+        String issueID = ReusableMethods.getValueFromJson(res, "id");
 
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
@@ -52,13 +49,11 @@ public class Issue {
                 delete("/rest/api/2/issue/" + issueID).
                 then().
                 statusCode(204);
-
     }
 
     @Test(testName = "Get an issue")
     public void GetIssue() throws IOException {
-        Response addIssueResponse = ReusableMethods.AddIssue();
-        String issueID = ReusableMethods.getValueFromJson(addIssueResponse, "id");
+        String issueID = ReusableMethods.getValueFromJson(res, "id");
 
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
