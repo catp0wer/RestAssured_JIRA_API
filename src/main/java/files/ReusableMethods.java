@@ -16,9 +16,12 @@ public class ReusableMethods {
     public ReusableMethods(String username, String password) {
         String pair = username + ":" + password;
         byte[] encodedBytes = Base64.encodeBase64(pair.getBytes());
-        token = "Basic "+new String(encodedBytes);
-
+        token = "Basic " + new String(encodedBytes);
     }
+    public String getToken(){
+        return token;
+    }
+
     public static String getProp(String key) throws IOException {
         Properties prop = new Properties();
         InputStream in = ClassLoader.getSystemResourceAsStream("env.properties");
