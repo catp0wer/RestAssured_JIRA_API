@@ -1,9 +1,7 @@
 package base;
 
 import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
-import org.apache.commons.codec.binary.Base64;
 import org.testng.annotations.Test;
 import files.ReusableMethods;
 import java.io.IOException;
@@ -29,7 +27,7 @@ public class Issue {
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
                 header("Content-Type", "application/json").
-                header("Cookie", "JSESSIONID=" + ReusableMethods.getSessionID()).
+                header("Authorization", tokenAuth.getToken()).
                 body(payLoad.getPutDataUpdateIssue()).
                 when().
                 put("/rest/api/2/issue/" + issueID).
@@ -44,7 +42,7 @@ public class Issue {
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
                 header("Content-Type", "application/json").
-                header("Cookie", "JSESSIONID=" + ReusableMethods.getSessionID()).
+                header("Authorization", tokenAuth.getToken()).
                 when().
                 delete("/rest/api/2/issue/" + issueID).
                 then().
@@ -54,11 +52,10 @@ public class Issue {
     @Test(testName = "Get an issue")
     public void GetIssue() throws IOException {
         String issueID = ReusableMethods.getValueFromJson(res, "id");
-
         RestAssured.baseURI = ReusableMethods.getProp("HOST");
         given().
                 header("Content-Type", "application/json").
-                header("Cookie", "JSESSIONID=" + ReusableMethods.getSessionID()).
+                header("Authorization", tokenAuth.getToken()).
                 when().
                 get("/rest/api/2/issue/"+issueID).
                 then().
